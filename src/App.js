@@ -1,25 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react"
+import "./App.css"
+import { BrowserRouter} from "react-router-dom"
+import { connect } from "react-redux";
+import AppRouter from "./components/AppRouter"
+import Header from "./components/Header"
 
-function App() {
+
+function App({ info }) {
+
+  const [isAuth, setIsAuth] = useState(info.isAuth)
+  const [error, setError] = useState(info.error)
+  const [serverMess, setServerMess] = useState(info.serverMess)
+
+  useEffect(() => {
+    setIsAuth(info.isAuth)
+    setError(info.error)
+    setServerMess(info.serverMess)
+  }, [info])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        
+        <Header isAuth={isAuth} />
+
+        {
+          error || serverMess ?
+            (
+              <div className="info">
+                <div className="info__error">{error}</div>
+                <div className="info__mess">{serverMess}</div>
+              </div>
+            ) : null
+        }
+
+        <AppRouter isAuth={isAuth} />
+
+      </div>
+    </BrowserRouter>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  info: state.auth,
+})
+
+export default connect(mapStateToProps, null)(App);
