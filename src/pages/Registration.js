@@ -70,7 +70,7 @@ const Registration = (props) => {
             }))
         }
 
-        if (emailChecked && passChecked && confirmChecked) {
+        if (emailChecked && (passChecked === true) && confirmChecked) {
 
             props.registration({
                 email: regState.email,
